@@ -1,0 +1,22 @@
+Noughts and Crosses / Tic Tac Toe / Naughts and Crosses
+
+Two player
+
+Browser Based
+
+Must notify who has won
+
+reset button
+
+Rules:
+
+Draw a 3 x 3 grid
+Alternate between 0 and x on click
+0 go first
+you cannot play in a square that has already been played
+game ends when player gets 3 in a row
+player wins when they get 3 in a row
+game ends when grid is filled
+game is drawn when grid is filled and there is not 3 in a row
+when reset button clicked, game starts over
+when game ends alert outcome.
