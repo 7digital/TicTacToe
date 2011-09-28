@@ -1,6 +1,5 @@
-﻿/*global describe: false, toString: false, beforeEach: false, it: false, HATEOAS_CONSOLE: false, expect: false */
-TICTACTOE = {};
-TICTACTOE.controller = function(){
+﻿var TICTACTOE = TICTACTOE || {};
+TICTACTOE.controller = function(umpire){
 		return{
 			currentPlayer : "0",
 			
@@ -22,7 +21,12 @@ TICTACTOE.controller = function(){
 					throw{name: "Square already played"};
 				}
 
-				this.board[x][y] = 1;
+				this.board[x][y] = this.currentPlayer;
+                
+                var hasAWinner = umpire.checkForWinner(this.board); 
+                if(hasAWinner) {
+                    return "Player " + this.currentPlayer + " rules!";
+                }
 				
 				this.currentPlayer = this.currentPlayer === "0" ? "X" : "0";
 				return "Player " + this.currentPlayer + "'s turn";
@@ -33,8 +37,14 @@ TICTACTOE.controller = function(){
 describe("Controller", function () {
 	"use strict";	
 	var controller;
+    var umpire;
 	beforeEach(function(){
-		controller = TICTACTOE.controller();
+        umpire = {
+			checkForWinner : function() {
+					return false;
+				}
+        };
+		controller = TICTACTOE.controller(umpire);
 	});
 
 	describe("play", function () {
@@ -86,7 +96,26 @@ describe("Controller", function () {
 					controller.play(1, 1);
 				}).toThrow({name: "Square already played"});
 			});
-		});			
+		});	
+
+        describe("checkForWinner", function () {
+            it("asks the umpire if there's a winner after the 1st play is recorded", function(){      
+                umpire.checkForWinner = function() {
+                    return true;
+                }
+                var result = controller.play(0, 0);
+                expect(result).toEqual("Player 0 rules!");
+            });
+            
+            it("asks the umpire if there's a winner after the 2nd play is recorded", function(){      
+                controller.play(0, 0);
+                umpire.checkForWinner = function() {
+                    return true;
+                }
+                var result = controller.play(1, 1);
+                expect(result).toEqual("Player X rules!");
+            });
+        });
 	});
 	
 	describe("getCurrentPlayer", function () {		
