@@ -84,11 +84,26 @@ describe("Umpire", function () {
 			});
 		});
         
-        it("has not a winner if board has not 3 in a row", function(){      
-            var board = [['X',,],[,,],['X',,'X']];
-            var result = umpire.checkForWinner(board);
-            expect(result).toEqual(false);
-        });
+		describe("not winning", function () {
+		
+			it("returns no winner for an empty board", function(){      
+				var board = [[,,],[,,],[,,]];
+				var result = umpire.checkForWinner(board);
+				expect(result).toEqual(false);
+			});
+			
+			it("has not a winner if board has not 3 in a row", function(){      
+				var board = [['X',,'0'],[,'0',],['X','0','X']];
+				var result = umpire.checkForWinner(board);
+				expect(result).toEqual(false);
+			});
+			
+			it("returns no winner for a drawn board", function(){      
+				var board = [['X','0','X'],['0','0','X'],['0','X','0']];
+				var result = umpire.checkForWinner(board);
+				expect(result).toEqual(false);
+			});
+		});
 	});
 	
 });
