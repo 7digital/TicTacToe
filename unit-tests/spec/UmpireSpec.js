@@ -1,17 +1,17 @@
 var TICTACTOE = TICTACTOE || {};
 TICTACTOE.umpire = function(){
         var winningCombos = [
-				[[0,0],[1,1],[2,2]],
-				[[2,0],[1,1],[0,2]],
-				[[0,1],[1,1],[2,1]],
-				[[0,0],[1,0],[2,0]],
-				[[0,2],[1,2],[2,2]],
-				[[0,0],[0,1],[0,2]],
-				[[1,0],[1,1],[1,2]],
-				[[2,0],[2,1],[2,2]]
+				[{x: 0, y: 0}, {x: 1, y: 1}, {x: 2, y: 2}],
+				[{x: 2, y: 0}, {x: 1, y: 1}, {x: 0, y: 2}],
+				[{x: 0, y: 1}, {x: 1, y: 1}, {x: 2, y: 1}],
+				[{x: 0, y: 0}, {x: 1, y: 0}, {x: 2, y: 0}],
+				[{x: 0, y: 2}, {x: 1, y: 2}, {x: 2, y: 2}],
+				[{x: 0, y: 0}, {x: 0, y: 1}, {x: 0, y: 2}],
+				[{x: 1, y: 0}, {x: 1, y: 1}, {x: 1, y: 2}],
+				[{x: 2, y: 0}, {x: 2, y: 1}, {x: 2, y: 2}]
 			],
 			getCell = function(board, point){
-				return board[point[0]][point[1]];
+				return board[point.x][point.y];
 				},
 			checkCells = function(cell1, cell2, cell3){
 				return (cell1===cell2)&&(cell2===cell3)&&(cell3!==undefined);
