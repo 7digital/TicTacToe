@@ -10,6 +10,9 @@ TICTACTOE.umpire = function(){
 				[[1,0],[1,1],[1,2]],
 				[[2,0],[2,1],[2,2]]
 			],
+			getCell = function(board, point){
+				return board[point[0]][point[1]];
+				},
 			checkCells = function(cell1, cell2, cell3){
 				return (cell1===cell2)&&(cell2===cell3)&&(cell3!==undefined);
 			};
@@ -17,12 +20,12 @@ TICTACTOE.umpire = function(){
 			checkForWinner : function(board) {
 			return winningCombos.some(
 				function(winningCombo){
-						var cell1 = board[winningCombo[0][0]][winningCombo[0][1]], 
-							cell2 = board[winningCombo[1][0]][winningCombo[1][1]],
-							cell3 = board[winningCombo[2][0]][winningCombo[2][1]];
+						var cell1 = getCell(board,winningCombo[0]), 
+							cell2 = getCell(board,winningCombo[1]),
+							cell3 = getCell(board,winningCombo[2]);
 						return checkCells(cell1,cell2,cell3);
 					})
-				}       
+				}      
 			}
 	};
 
