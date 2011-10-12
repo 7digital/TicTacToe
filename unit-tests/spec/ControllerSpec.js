@@ -1,10 +1,23 @@
 ﻿var TICTACTOE = TICTACTOE || {};
 TICTACTOE.controller = function(umpire){
 	var currentPlayer = "0",
-		board = [[],[],[]];
-
+		board = [[],[],[]],
+		gameOver = false,
+		turnsPlayed = 0;
 	return {
-		play : function(x, y) {
+		reset : function() {
+			board = [[],[],[]];
+			turnsPlayed = 0;
+			gameOver = false;
+			currentPlayer  = "0";
+			return "Player 0's turn";
+		},
+	
+		play : function(x, y) {	
+			if (gameOver){
+				throw{name: "Game has ended"}
+			}
+		
 			if (x > 2 || x < 0) {
 				throw {name: "Invalid square"};
 			}
@@ -15,14 +28,22 @@ TICTACTOE.controller = function(umpire){
 			if (board[x][y]) {
 				throw{name: "Square already played"};
 			}
+			
+			turnsPlayed +=1;
 
 			board[x][y] = currentPlayer;
 			
 			var hasAWinner = umpire.checkForWinner(board); 
-			if(hasAWinner) {
+			if (hasAWinner) {				
+				gameOver = true;
 				return "Player " + currentPlayer + " rules!";
 			}
 			
+			if (turnsPlayed >= 9){
+				gameOver = true;
+				return "Game is a draw";
+			}
+						
 			currentPlayer = currentPlayer === "0" ? "X" : "0";
 			return "Player " + currentPlayer + "'s turn";
 		}
@@ -62,6 +83,38 @@ describe("Controller", function () {
 			});
 
 		});
+		
+		describe("draw", function(){
+			it("should return expected message if game is drawn", function(){
+				var result;
+				for (var i = 0; i < 3; i++) {
+					for (var j = 0; j < 3; j++) {
+						result = controller.play(i, j);
+					}
+				}
+				expect(result).toEqual("Game is a draw");
+			});	
+		});
+		
+		describe("reset", function(){
+			it("should start a new game when reset", function(){
+				for (var i = 0; i < 3; i++) {
+					for (var j = 0; j < 3; j++) {
+						controller.play(i, j);
+					}
+				}
+				controller.reset();
+				controller.play(1,2);
+			});	
+			
+			it("should set current player to 0 when game is reset", function(){
+				controller.play(1,2);
+				var currentPlayer =                   controller.reset();
+				expect(currentPlayer).toEqual("Player 0's turn");
+				currentPlayer = controller.play(2,2);
+				expect(currentPlayer).toEqual("Player X's turn");
+			});	
+		});
 			
 		describe("fowl", function () {
 		
@@ -90,10 +143,31 @@ describe("Controller", function () {
 			});
 			
 			it("should throw an exception when you play a square twice", function() {
-				expect(function() {
-					controller.play(1, 1);
+				controller.play(1, 1);
+				expect(function() {					
 					controller.play(1, 1);
 				}).toThrow({name: "Square already played"});
+			});
+			
+			it("should throw an exception if you try to play on a finished game", function(){
+				umpire.checkForWinner = function() {
+                    return true;
+                }
+				controller.play(1, 1);
+				expect(function() {					
+					controller.play(1, 2);
+				}).toThrow({name: "Game has ended"});
+			});
+			
+			it("should throw an exception if you try to play on full board", function(){
+				for (var i = 0; i < 3; i++) {
+					for (var j = 0; j < 3; j++) {
+						controller.play(i, j);
+					}
+				}
+				expect(function() {					
+					controller.play(1, 2);
+				}).toThrow({name: "Game has ended"});
 			});
 		});	
 
@@ -115,6 +189,8 @@ describe("Controller", function () {
                 expect(result).toEqual("Player X rules!");
             });
         });
+		
+		
 	});
 	
 });

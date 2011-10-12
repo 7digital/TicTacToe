@@ -13,10 +13,10 @@ Rules:
 Draw a 3 x 3 grid - tick
 Alternate between 0 and x on click - tick
 0 go first - tick
-you cannot play in a square that has already been played
-game ends when player gets 3 in a row
-player wins when they get 3 in a row
-game ends when grid is filled
-game is drawn when grid is filled and there is not 3 in a row
-when reset button clicked, game starts over
+you cannot play in a square that has already been played - tick
+game ends when player gets 3 in a row -tick
+player wins when they get 3 in a row - tick
+game ends when grid is filled - tick
+game is drawn when grid is filled and there is not 3 in a row - tick
+when reset button clicked, game starts over - tick
 when game ends alert outcome.
