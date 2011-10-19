@@ -1,6 +1,5 @@
 <!doctype html>
 <html>
-<script>http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js</script>
 <head>
 	<title>Tic Tac Toe</title>
 	<link rel="stylesheet" href="style.css" />
@@ -8,6 +7,8 @@
 <body>
 	<h1>Tic Tac Toe</h1>
 
+    <h2 id="status"></h2>
+    
 	<table>
 	<tr>
 	<td></td>
@@ -25,5 +26,46 @@
 	<td></td>
 	</tr>
 	</table>
+    <input type="button" value="Reset" />
 </body>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+<script src="scripts/controller.js"></script>
+<script src="scripts/umpire.js"></script>
+<script>
+$(function() {
+  var controller = TICTACTOE.controller(TICTACTOE.umpire());
+  var rows = $("table tr");
+  var cells;
+  var i,j;
+  var result;
+
+  function reset() {
+    result = controller.reset();
+    $("#status").text(result.message);
+    $("td").text("");
+  }
+  reset();
+  
+  for (i = 0; i < 3; i++) {
+    cells = $("td", rows[i]);
+    for (j = 0; j < 3; j++) {
+      $(cells[j]).click(function(x, y) { 
+        return function() {
+          try {
+            var r = controller.play(x, y);
+            result = r.message;
+            $(this).text(r.playedBy);
+          }
+          catch (ex) {
+            result = ex.name;
+          }
+          $("#status").text(result);
+        };
+      }(i, j));
+    }
+  }
+    
+  $("input").click(reset);
+});
+</script>
 </html>
