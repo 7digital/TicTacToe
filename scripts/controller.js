@@ -9,8 +9,8 @@ TICTACTOE.controller = function(umpire){
 			board = [[],[],[]];
 			turnsPlayed = 0;
 			gameOver = false;
-			currentPlayer  = "0";
-			return "Player 0's turn";
+			currentPlayer = "0";
+			return { message : "Player 0's turn" };
 		},
 	
 		play : function(x, y) {	
@@ -33,19 +33,25 @@ TICTACTOE.controller = function(umpire){
 
 			board[x][y] = currentPlayer;
 			
+            var result = { playedBy : currentPlayer };
+            
 			var hasAWinner = umpire.checkForWinner(board); 
 			if (hasAWinner) {				
 				gameOver = true;
-				return "Player " + currentPlayer + " rules!";
+                result.message = "Player " + currentPlayer + " rules!";
+                return result;
 			}
 			
 			if (turnsPlayed >= 9){
 				gameOver = true;
-				return "Game is a draw";
+				result.message = "Game is a draw";
+                return result;
 			}
 						
 			currentPlayer = currentPlayer === "0" ? "X" : "0";
-			return "Player " + currentPlayer + "'s turn";
+			
+            result.message = "Player " + currentPlayer + "'s turn";
+            return result;
 		}
 	};
 };

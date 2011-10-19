@@ -21,17 +21,24 @@
 		
 			it("should return 'Player X's turn' if it's player X's turn next", function() {
 				var result = controller.play(1, 1);	
-				expect(result).toEqual("Player X's turn");
+				expect(result.message).toEqual("Player X's turn");
 			});
 			
 			it("should return 'Player 0's turn' if it's player 0's turn next", function() {
 				var result = controller.play(1, 1);	
 				result = controller.play(1, 2);	
-				expect(result).toEqual("Player 0's turn");
+				expect(result.message).toEqual("Player 0's turn");
 			});
 
 		});
 		
+        describe("returns played by", function () {		
+			it("should return who played, innit", function() {
+				var result = controller.play(1, 1);	
+				expect(result.playedBy).toEqual("0");
+			});
+		});
+        
 		describe("draw", function(){
 			it("should return expected message if game is drawn", function(){
 				var result;
@@ -40,7 +47,7 @@
 						result = controller.play(i, j);
 					}
 				}
-				expect(result).toEqual("Game is a draw");
+				expect(result.message).toEqual("Game is a draw");
 			});	
 		});
 		
@@ -57,10 +64,10 @@
 			
 			it("should set current player to 0 when game is reset", function(){
 				controller.play(1,2);
-				var currentPlayer =                   controller.reset();
-				expect(currentPlayer).toEqual("Player 0's turn");
-				currentPlayer = controller.play(2,2);
-				expect(currentPlayer).toEqual("Player X's turn");
+				var result = controller.reset();
+				expect(result.message).toEqual("Player 0's turn");
+				result = controller.play(2,2);
+				expect(result.message).toEqual("Player X's turn");
 			});	
 		});
 			
@@ -125,7 +132,7 @@
                     return true;
                 }
                 var result = controller.play(0, 0);
-                expect(result).toEqual("Player 0 rules!");
+                expect(result.message).toEqual("Player 0 rules!");
             });
             
             it("asks the umpire if there's a winner after the 2nd play is recorded", function(){      
@@ -134,7 +141,7 @@
                     return true;
                 }
                 var result = controller.play(1, 1);
-                expect(result).toEqual("Player X rules!");
+                expect(result.message).toEqual("Player X rules!");
             });
         });
 		
